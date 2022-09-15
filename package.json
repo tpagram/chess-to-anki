@@ -1,0 +1,19 @@
+{
+  "name": "chess-to-anki",
+  "version": "1.0.0",
+  "description": "Extracts moves from Chess.com post-game reviews and converts them to Anki cards",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas Pagram",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chess.js": "^0.13.3",
+    "webpack": "^5.74.0"
+  },
+  "dependencies": {
+    "chess.js": "^1.0.0-alpha.0"
+  }
+}

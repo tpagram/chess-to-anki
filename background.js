@@ -1,8 +1,6 @@
-const chess = require('chess');
+const Chess = require("chess");
 
 browser.browserAction.onClicked.addListener(handleClick);
-  
-
 
 async function handleClick() {
   try {
@@ -12,17 +10,42 @@ async function handleClick() {
     })
     if (activeTabs.length < 1) throw "No active tab available"
 
-    const response = await browser.tabs.sendMessage(activeTabs[0].id, "extract_move")
+    const { myMove, engineMove, fen } = await browser.tabs.sendMessage(activeTabs[0].id, "extract_move")
 
-    console.log("Message from the content script:");
-    console.log(response);
+    console.log(generateFens(myMove, engineMove, fen))
   } catch(error) {
     console.error(`Error: ${error}`)
   }
 }
 
-function handleResponse(response) {
+function generateFens(myMove, engineMove, fen) {
+  const chess = new Chess()
+  chess.load(fen)
+  chess.move(myMove)
+  problemFen = chess.fen()
+  chess.undo()
+  chess.move(engineMove)
+  solutionFen = chess.fen()
 
+  return [
+    highlightFenMoves(fen, problemFen),
+    highlightFenMoves(fen, solutionFen)
+  ]
+}
+
+function highlightFenMoves(priorFen, currentFen) {
+  if (priorFen.length != currentFen.length) throw "Fen ${priorFen} and ${currentFen} are different lengths."
+
+  expandedPriorFen = expandFenNumeralsIntoDots(priorFen)
+  expandedCurrentFen = expandFenNumeralsIntoDots(currentFen)
+
+  return expandedCurrentFen.map((notation, index) => {
+    notation == currentFen[index] ? notation : "(" + notation + ")"
+  }).join("")
+}
+
+function expandFenNumeralsIntoDots(fen) {
+  fen.split("").map(c => /^\d+$/.test(c) ? ".".repeat(c) : c)
 }
 
 
