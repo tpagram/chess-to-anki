@@ -22,6 +22,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "chess.js": "^1.0.0-alpha.0"
   }
 }
