@@ -5,6 +5,7 @@ export function generateFens(
   engineMove: string,
   enemyMove: string,
   priorFen: string,
+  mode: string
 ) {
   const chess: Chess = new Chess();
 
@@ -18,6 +19,13 @@ export function generateFens(
   chess.undo();
   chess.move(engineMove);
   const solutionFen: string = chess.fen();
+
+  if (mode === 'bestmove') {
+    return [
+      highlightMove(priorFen, baseFen, true).join(''),
+      highlightMove(baseFen, solutionFen).join(''),
+    ];
+  }
 
   const highlightedBaseFen: string[] = highlightMove(priorFen, baseFen, true);
   const highlightedProblemFen: string[] = highlightMove(baseFen, problemFen);

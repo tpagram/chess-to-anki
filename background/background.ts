@@ -4,9 +4,13 @@ import ExtractedMoveData from '../types/ExtractedMoveData';
 import buildChessProblem from './chessProblemBuilder';
 import ChessProblem from '../types/ChessProblem';
 
-browser.browserAction.onClicked.addListener(handleClick);
+// browser.browserAction.onClicked.addListener(handleClick);
 
-async function handleClick() {
+document.querySelectorAll('.chessExportChoice').forEach((element) => {
+  element.addEventListener('click', () => handleClick(element.id));
+});
+
+async function handleClick(mode: string) {
   try {
     const activeTabs = await browser.tabs.query({
       currentWindow: true,
@@ -28,6 +32,7 @@ async function handleClick() {
       engineMove,
       priorEnemyMove,
       priorFen,
+      mode,
     );
 
     const chessProblem: ChessProblem = buildChessProblem(
@@ -38,6 +43,7 @@ async function handleClick() {
       myMove,
       priorEnemyMove,
       engineMove,
+      mode,
     );
 
     await createAnkiCard(chessProblem);
